@@ -16,7 +16,10 @@ int lower = 0;
 int upper = 10000;
 int amountThreads = 5;
 
-
+/**
+ * Method that finds all the primes between a lowerBound and upperBound.
+ * These numbers are then added to the global vector primeNumbers.
+*/
 void findPrimes(int lowerBound, int upperBound) {
     for (int number = lowerBound; number < upperBound; number++) {
         bool isPrime = true;
