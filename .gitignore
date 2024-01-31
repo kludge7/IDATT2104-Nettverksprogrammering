@@ -35,4 +35,5 @@
 build
 a.out
 target
-
+.gitignore
+.vscode
