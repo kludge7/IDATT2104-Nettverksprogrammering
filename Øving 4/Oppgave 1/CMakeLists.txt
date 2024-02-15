@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
-project(AsyncSocketServerCompletionHandler)
+project(Server)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(AsyncSocketServerCompletionHandler AsyncSocketServerCompletionHandler.cpp)
+add_executable(Server Server.cpp)
 
-target_link_libraries(AsyncSocketServerCompletionHandler PRIVATE pthread)
+target_link_libraries(Server PRIVATE pthread)

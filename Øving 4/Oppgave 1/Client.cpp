@@ -17,34 +17,32 @@ int main() {
     char result[MAX_BUFFER_SIZE];
     memset(result, 0, MAX_BUFFER_SIZE);
 
-    // Create UDP socket
+    // Create a UDP socket
     clientSocket = socket(AF_INET, SOCK_DGRAM, 0);
-
-    // Configure server address
+    
+    // Initialize and configure the server address structure
     memset(&serverAddr, 0, sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(SERVER_PORT);
-
-    // Convert IP address from text to binary form
     inet_pton(AF_INET, SERVER_IP, &serverAddr.sin_addr);
-
+    
+    std::cout << "Enter two numbers and an operator (+, -, / or *).\n";
+    std::cout << "For example: 1*5\n";
     while (true) {
-        cout << "Enter a mathematical expression (e.g., 5 + 3): ";
+        // Get line from terminal and enter it into buffer
         cin.getline(buffer, MAX_BUFFER_SIZE);
 
-        // Send expression to server
+        // Send buffer to server
         sendto(clientSocket, buffer, strlen(buffer), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
 
-        // Receive result from server
+        // Get result from server
         recvfrom(clientSocket, result, MAX_BUFFER_SIZE, 0, nullptr, nullptr);
-
         cout << "Server Response: " << result << endl;
+
+        // Reset buffer and result
         memset(result, 0, MAX_BUFFER_SIZE);
         memset(buffer, 0, MAX_BUFFER_SIZE);
-
     }
-
-    // Close the socket
     close(clientSocket);
 
     return 0;
