@@ -1,0 +1,35 @@
+<!-- File: index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Compiler</title>
+</head>
+<body>
+    <textarea id="code" rows="10" cols="50" placeholder="Enter your code here"></textarea><br>
+    <button onclick="compileCode()">Compile & Run</button>
+    <pre id="output"></pre>
+
+    <script>
+        function compileCode() {
+            const code = document.getElementById("code").value;
+
+            fetch('/compile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code }),
+            })
+            .then(response => response.text())
+            .then(output => {
+                document.getElementById("output").innerText = output;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
