@@ -36,9 +36,9 @@ void handleRequest(int clientSocket) {
         "\r\n"
         "<HTML><BODY>\r\n"
         "<H1>Hilsen. Du har koblet deg opp til min enkle web-tjener </H1>\r\n"
-        "<UL>\r\n" +
+        +
         header.str() +
-        "</UL>\r\n" +
+        +
         "</BODY></HTML>";
 
     // Send the HTTP response to the client
