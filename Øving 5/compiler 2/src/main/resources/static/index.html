@@ -1,35 +1,35 @@
-<!-- File: index.html -->
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Compiler</title>
+    <title>C++ Compiler</title>
 </head>
 <body>
-    <textarea id="code" rows="10" cols="50" placeholder="Enter your code here"></textarea><br>
-    <button onclick="compileCode()">Compile & Run</button>
-    <pre id="output"></pre>
+<textarea id="code" rows="10" cols="80"></textarea><br>
+<button onclick="compileCode()">Compile and Run</button>
+<div id="output"></div>
 
-    <script>
-        function compileCode() {
-            const code = document.getElementById("code").value;
+<script>
+    function compileCode() {
+        var code = document.getElementById('code').value;
 
-            fetch('/compile', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ code }),
-            })
+        fetch('/compiler/compile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code: code }),
+        })
             .then(response => response.text())
-            .then(output => {
-                document.getElementById("output").innerText = output;
+            .then(data => {
+                document.getElementById('output').innerText = data;
             })
             .catch(error => {
                 console.error('Error:', error);
             });
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
