@@ -16,15 +16,15 @@
     
     const compileCode = async () => {
     try {
-        const response = await fetch('http://localhost:3000/compile', {
+        const response = await fetch('http://localhost:8080/codeEditor/compile', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
             },
-        body: JSON.stringify({ code }),
+        body: code.value,
         });
-        const data = await response.json();
-        output.value = data.output;
+        const data = await response.text();
+        output.value = data;
     } catch (error) {
         console.error('Error compiling code:', error);
         output.value = 'Error compiling code. Check the console for details.';
@@ -59,6 +59,7 @@ button:hover {
     border: 1px solid #ddd;
     padding: 10px;
     background-color: #f9f9f9;
+    color: #000000;
 }
 pre {
     white-space: pre-wrap;
