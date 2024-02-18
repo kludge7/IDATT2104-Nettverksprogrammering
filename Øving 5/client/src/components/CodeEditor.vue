@@ -1,4 +1,3 @@
-<!-- CodeEditor.vue -->
 <template>
     <div class="code-editor">
         <textarea v-model="code" placeholder="Enter C++ code"></textarea>
@@ -21,29 +20,35 @@
             headers: {
                 'Content-Type': 'text/plain',
             },
-        body: code.value,
+            body: code.value,
         });
         const data = await response.text();
         output.value = data;
     } catch (error) {
         console.error('Error compiling code:', error);
-        output.value = 'Error compiling code. Check the console for details.';
+        output.value = 'Error compiling code.';
     }
 };
 </script>
 <style scoped>
 .code-editor {
-    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  
+    min-width: 600px;
     margin: 0 auto;
     padding: 20px;
+    height: 100vh; 
 }
+
+
 textarea {
     width: 100%;
     height: 200px;
-    margin-bottom: 10px;
 }
+
 button {
-    display: block;
     width: 100%;
     padding: 10px;
     background-color: #4caf50;
@@ -51,9 +56,11 @@ button {
     border: none;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #45a049;
 }
+
 .output-section {
     margin-top: 20px;
     border: 1px solid #ddd;
@@ -61,6 +68,7 @@ button:hover {
     background-color: #f9f9f9;
     color: #000000;
 }
+
 pre {
     white-space: pre-wrap;
 }

@@ -1,4 +1,3 @@
-// src/main/java/com/kludge/codeEditor/controller/CodeEditorController.java
 package com.kludge.codeEditor.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
