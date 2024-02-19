@@ -7,6 +7,7 @@ import java.io.*;
 @Service
 public class CodeEditorService {
 
+    @SuppressWarnings("deprecation")
     public String compileCode(String code) {
         try {
             File tempFile = File.createTempFile("temp", ".cpp");
@@ -17,14 +18,6 @@ public class CodeEditorService {
 
             Process process = Runtime.getRuntime().exec("g++ -std=c++11 " + tempFile.getPath() + " -o " + tempFile.getPath() + ".out");
             int exitCode = process.waitFor();
-
-            StringBuilder compilationOutput = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    compilationOutput.append(line).append("\n");
-                }
-            }
 
             if (exitCode == 0) {
                 process = Runtime.getRuntime().exec(tempFile.getPath() + ".out");
