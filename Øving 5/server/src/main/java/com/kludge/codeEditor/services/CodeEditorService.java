@@ -2,46 +2,37 @@ package com.kludge.codeEditor.services;
 
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
 @Service
 public class CodeEditorService {
+    public static String compileAndRun(String sourceCode) throws IOException, InterruptedException {
+        File tempFile = File.createTempFile("temp", ".cpp");
+        try (PrintWriter writer = new PrintWriter(new FileWriter(tempFile))) {
+            writer.write(sourceCode);
+        }
 
-    @SuppressWarnings("deprecation")
-    public String compileCode(String code) {
-        try {
-            File tempFile = File.createTempFile("temp", ".cpp");
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "docker", "run", "-v", tempFile.getParent() + ":/code", "gcc:latest", "sh", "-c",
+                "g++ /code/" + tempFile.getName() + " -o /code/a.out && /code/a.out");
+        processBuilder.redirectErrorStream(true);
 
-            try (PrintWriter writer = new PrintWriter(tempFile)) {
-                writer.write(code);
+        Process process = processBuilder.start();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
             }
-
-            Process process = Runtime.getRuntime().exec("g++ -std=c++11 " + tempFile.getPath() + " -o " + tempFile.getPath() + ".out");
-            int exitCode = process.waitFor();
-
-            if (exitCode == 0) {
-                process = Runtime.getRuntime().exec(tempFile.getPath() + ".out");
-                StringBuilder executionOutput = new StringBuilder();
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        executionOutput.append(line).append("\n");
-                    }
-                }
-
-                tempFile.delete();
-                new File(tempFile.getPath() + ".out").delete();
-
-                return executionOutput.toString();
-            } else {
-                tempFile.delete();
-                new File(tempFile.getPath() + ".out").delete();
-
-                return "Execution skipped due to compilation error";
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return "Error compiling and running code";
+            process.waitFor(); 
+            return output.toString();
+        } finally {
+            tempFile.delete();
         }
     }
 }
